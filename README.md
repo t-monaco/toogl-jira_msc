@@ -4,7 +4,7 @@ The purpose of this repo is to speed up the process of uploading your working ho
 There are some steps you need to follow in order to successfully upload your data your JIRA.
 * Your time tracks on TOGGL **must** start with the JIRA ticket number. A regex will look the ticket number on the time track's description and split the result. The found number will be your issue_id and the rest will be uploaded as description.
 
-Additionally, this script was created in order to be executed (manually) EOD. It means, that by default will upload your working hours of the day.
+Additionally, this script was created in order to be executed (manually) EOD. It means, that by default will upload your working hours of the current day.
 ## Set up
 1. Install requirements.txt packages
 ```bash

@@ -27,7 +27,6 @@ def main():
     united_dataset, not_united_dataset = process_data(toggl_raw_data)
 
     for key, united_item in enumerate(united_dataset):
-        print(united_item)
         print(f'{Fore.YELLOW}Uploading item {key + 1} of {len(united_dataset)}...')
         jira_response = upload_data_to_jira(united_item)
         toggl_response = update_toggl_time_entry(united_item)

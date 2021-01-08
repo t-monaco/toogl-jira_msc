@@ -1,7 +1,7 @@
 import json
 import re
 import requests
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 import sys
 from colorama import Fore
 from config import *
@@ -13,17 +13,20 @@ from config import *
 #  - Make more flexible _TaskType_ value
 
 def main():
-    today_date = str(date.today().strftime("%Y-%m-%dT%H:%M:%SZ"))
-    tomorrow_date = str((date.today() + timedelta(days=1)
-                         ).strftime("%Y-%m-%dT%H:%M:%SZ"))
-    yesterday_date = str((date.today() + timedelta(days=-1)
-                          ).strftime("%Y-%m-%dT%H:%M:%SZ"))
+    initial_date = ''
+    end_date = ''
 
     if '--yesterday' in sys.argv:
-        toggl_raw_data = get_toggl_time_entries_json(yesterday_date, today_date)
+        initial_date = str((date.today() + timedelta(days=-1)).strftime("%Y-%m-%dT%H:%M:%SZ"))
+        end_date = str(date.today().strftime("%Y-%m-%dT%H:%M:%SZ"))
+    elif '--custom' in sys.argv:
+        initial_date = str(datetime.strptime(sys.argv[2], "%Y-%m-%d").strftime("%Y-%m-%dT%H:%M:%SZ"))
+        end_date = str(datetime.strptime(sys.argv[3], "%Y-%m-%d").strftime("%Y-%m-%dT%H:%M:%SZ"))
     else:
-        toggl_raw_data = get_toggl_time_entries_json(today_date, tomorrow_date)
+        initial_date = str(date.today().strftime("%Y-%m-%dT%H:%M:%SZ"))
+        end_date = str((date.today() + timedelta(days=1)).strftime("%Y-%m-%dT%H:%M:%SZ"))
 
+    toggl_raw_data = get_toggl_time_entries_json(initial_date, end_date)
     united_dataset, not_united_dataset = process_data(toggl_raw_data)
 
     for key, united_item in enumerate(united_dataset):
@@ -47,7 +50,7 @@ def get_toggl_time_entries_json(initial_date, final_date):
 def process_data(data):
     united = []
     not_united = []
-    issue_id_regex = r"((UMP|MMP)-\d{4})\s"
+    issue_id_regex = r"(((UMP|MMP)-\d{4})|INT-\d{2,4})\s"
 
     for item in data:
         issue_id = re.search(issue_id_regex, item.get('description', ''))

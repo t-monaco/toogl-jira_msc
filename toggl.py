@@ -66,6 +66,10 @@ def process_data(data):
 
 
 def upload_data_to_jira(item):
+    task_type = 'DEVELOPMENT: BACK END'
+    if item.get('issue_id').startswith('INT'):
+        task_type = 'INTERNAL ACTIVITY'
+    
     payload = {
         'timeSpentSeconds': item.get('duration'),
         'dateStarted': item.get('start'),
@@ -79,7 +83,7 @@ def upload_data_to_jira(item):
         },
         'worklogAttributes': [{
             'key': '_TaskType_',
-            'value': 'DEVELOPMENT: BACK END'
+            'value': task_type
         },
             {
                 'key': '_Round_',

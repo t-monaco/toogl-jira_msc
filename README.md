@@ -25,5 +25,10 @@ If for some reason you forgot to upload your hours from the day before, run the 
 python3 toggl.py --yesterday
 ```
 
+Furthermore, there is a flag to upload all the remaining hours, that has no **"OnJira"** tag, with an specific time frame. The flag `--custom` with the desire time frame `yyyy-mm-dd`. First the `initial_date`, follow by the `end_date`, with space in between. The time tracks of the end date are omitted, this means that the time tracks that will be uploaded are from the `initial_date` to `end_date - 1.`
+```
+python3 toggl.py --custom 2021-01-01 2021-01-14
+```
+
 ## Disclaimer
 This script was created for personal uses, so it might not work for everyone's workspace. However, it can be modified for each different situation.
